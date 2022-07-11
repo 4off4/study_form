@@ -1,34 +1,40 @@
-<html> 
-<head> 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
-    <script src="https://malsup.github.io/jquery.form.js"></script> 
- 
-    <script> 
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+    <script src="https://malsup.github.io/jquery.form.js"></script>
+    <script src="main.css"></script>
+    <script>
         function erchk() {
             if (document.getElementById("name").value == "") {
                 alert("내용을 입력해주세요");
                 return false;
-            }else {
+            } else {
                 printName();
             }
         }
-        function printName()  {
+
+        function printName() {
             const name = document.getElementById('name').value;
             document.getElementById("result").innerText = name;
 
-            if(window.event.keyCode == 13){
+            if (window.event.keyCode == 13) {
                 console.log("33");
                 console.log(name);
-                document.all.name.style.visibility="hidden";
+                document.all.name.style.visibility = "hidden";
 
             }
         }
-    </script> 
-</head> 
+    </script>
+</head>
+
 <body>
-        글쓰기 : 
-        <textarea id="name" onkeyup='printName()'></textarea> 
-        <input type="submit" value="Submit Comment" id="submit"  onclick="erchk()"/> 
+    <div class="boxHome">
+        글쓰기 :
+        <textarea id="name" onkeyup='printName()'></textarea>
+        <input type="submit" value="Submit Comment" id="submit" onclick="erchk()" />
         <div id='result'></div>
+    </div>
 </body>
+
 </html>
