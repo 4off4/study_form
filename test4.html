@@ -1,182 +1,75 @@
-<!DOCTYPE html>
-<html lang="kor">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-
-    <style>
-        .sa.show {
-            transform: none;
-            opacity: 0;
-        }
-        
-        .sa {
-            transition: all .5s ease;
-        }
-        
-        .chart1 {
-            width: 100%;
-            max-width: 700px;
-            margin: 0 auto;
-            margin-top: 50px;
-        }
-    </style>
-    <script>
-    </script>
+    <!-- d3.js -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 </head>
 
-
 <body>
-    <h1>표만들기</h1>
-    <div class="news_title">
-        <span>1</span>
-        <h1>표만들기</h1>
-        <h3>"스스로 원해서 난민이 된 사람은 아무도 없다. 종교 때문에, 정치적 박해 때문에, 혹은 전쟁 때문에 떠밀리듯 모국을 떠나야했던 이들이 난민이다 그 중에는 부모를 따라온 아이들도 적지 않다. 난민이 무슨 말인지도 모를 그들은 오로지 부모만 의지한 채 낯선 땅에 발을 들였다 적응도 벅찬데 뜻하지 않은 어려움도 감내해야 한다. 차별, 혐오, 편견 등 굳이 알 필요가 없는 단어들을 온 몸으로 흡수해야 한다."</h3>
-        <h3>"우리 주변에는 많은 난민들이 살고 있다. 눈에 띄지 않을 뿐이다. 법무부 통계에 따르면 2020년 기준 누적 난민인정자 수는 총 1천91명이다. 2020년 한 해에만 69명이 대한민국 정부로부터 난민으로 인정을 받았다 미얀마, 에티오피아, 방글라데시, 파키스탄, 이란 등 국적도 다양했다. 아직 난민으로 인정받지 못한 이들까지 합하면 그 숫자는 3만명을 훌쩍 넘긴다 그리고 그 속에는 그림자처럼 살아가야 하는 아이들이 있다."</h3>
-        <br><br>
-    </div>
-    <div class="chart1 sa sa-up show">
-        <canvas id="bar-chart" width="700" height="350"></canvas>
-    </div>
-    <div class="chart1 sa sa-up">
-        <canvas id="bar-chart2" width="700" height="350"></canvas>
-    </div>
-    <div class="chart1 sa sa-up show">
-        <canvas id="bar-chart3" width="700" height="350"></canvas>
-    </div>
-    <div class="chart1 sa sa-up show">
-        <canvas id="bar-chart4" width="700" height="350"></canvas>
-    </div>
-    <div class="chart1 sa sa-up show">
-        <canvas id="bar-chart5" width="700" height="350"></canvas>
-    </div>
-
+    <canvas id="myChart" width="400" height="200"></canvas>
     <script>
-        new Chart(document.getElementById("bar-chart"), {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
-                    label: "Population (millions)",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                    data: [2478, 5267, 734, 784, 433]
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
                 }]
             },
             options: {
-                legend: {
-                    display: false
+                animation: {
+                    duration: 0
                 },
-                title: {
-                    display: true,
-                    text: 'Predicted world population (millions) in 2050'
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
                 }
             }
         });
-        new Chart(document.getElementById("bar-chart2"), {
-            type: 'bar',
-            data: {
-                labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
-                datasets: [{
-                    label: "Population (millions)",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                    data: [2478, 5267, 734, 784, 433]
-                }]
+        // label 변경
+        myChart.data.labels = ["R", "B", "Y", "G", "P", "O"];
+        // 그냥 마치, 딕셔너리 리스트의 자료구조인 것처럼 접근해서 값을 변경해줘도 문제없습니다. 
+        myChart.data.datasets[0].data = [1, 2, 3, 4, 5, 6];
+        myChart.update();
+        var frame_duration = 1000;
+        var i = 0;
+        d3.interval(
+            function() {
+                if (i > 10) {
+                    this.stop();
+                } else {
+                    myChart.data.datasets[0].data = [1 + i, 2 + i, 3 + i, 4 + i, 5 + i, 6 + i];
+                    myChart.update(); // 데이터를 바꾼 다음, 이렇게 업데이트를 해야 적용된다.
+                }
+                i = i + 1;
             },
-            options: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: 'Predicted world population (millions) in 2050'
-                }
-            }
-        });
-        new Chart(document.getElementById("bar-chart3"), {
-            type: 'bar',
-            data: {
-                labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
-                datasets: [{
-                    label: "Population (millions)",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                    data: [2478, 5267, 734, 784, 433]
-                }]
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: 'Predicted world population (millions) in 2050'
-                }
-            }
-        });
-        new Chart(document.getElementById("bar-chart4"), {
-            type: 'bar',
-            data: {
-                labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
-                datasets: [{
-                    label: "Population (millions)",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                    data: [2478, 5267, 734, 784, 433]
-                }]
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: 'Predicted world population (millions) in 2050'
-                }
-            }
-        });
-        new Chart(document.getElementById("bar-chart5"), {
-            type: 'bar',
-            data: {
-                labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
-                datasets: [{
-                    label: "Population (millions)",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                    data: [2478, 5267, 734, 784, 433]
-                }]
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: 'Predicted world population (millions) in 2050'
-                }
-            }
-        });
-
-
-        window.addEventListener('scroll', () => {
-            //스크롤을 할 때마다 로그로 현재 스크롤의 위치가 찍혀나온다.
-            console.log(window.scrollX, window.scrollY);
-
-            var xScroll = window.scrollX;
-            var yScroll = window.scrollY;
-
-            if (xScroll == 0 && yScroll > 1643) {
-                $('.sa.show').eq(0).css('opacity', 1);
-            }
-
-        });
+            frame_duration
+        );
     </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.slim.js" integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY=" crossorigin="anonymous"></script>
 </body>
 
 </html>
-
-<!--참고:-->
-<!--https://www.chartjs.org/docs/latest/charts/bar.html-->
-<!--https://velog.io/@ysrz99/%EC%8A%A4%ED%81%AC%EB%A1%A4-%EC%9C%84%EC%B9%98%EC%97%90-%EB%94%B0%EB%9D%BC-%EB%B3%80%ED%95%98%EB%8A%94-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98-->
-<!--https://inpa.tistory.com/entry/AOS-%F0%9F%93%9A-%EC%8A%A4%ED%81%AC%EB%A1%A4-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98-Animate-On-Scroll-->

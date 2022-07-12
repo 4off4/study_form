@@ -9,12 +9,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
     <style>
-        .sa>.show {
+        .sa.show {
             transform: none;
+            opacity: 1;
         }
         
         .sa {
-            transition: all .5s ease;
+            transition: all 25s ease;
+            transition-delay: 10s;
+            transition-timing-function: ease-in-out;
         }
         
         .chart1 {
@@ -39,19 +42,19 @@
         <br><br>
     </div>
     <div class="chart1 sa sa-up show">
-        <canvas id="bar-chart" width="700" height="350" style="opacity: 0;"></canvas>
+        <canvas id="bar-chart" width="700" height="350"></canvas>
     </div>
     <div class="chart1 sa sa-up show">
-        <canvas id="bar-chart2" width="700" height="350" style="opacity: 0;"></canvas>
+        <canvas id="bar-chart2" width="700" height="350"></canvas>
     </div>
     <div class="chart1 sa sa-up show">
-        <canvas id="bar-chart3" width="700" height="350" style="opacity: 0;"></canvas>
+        <canvas id="bar-chart3" width="700" height="350"></canvas>
     </div>
     <div class="chart1 sa sa-up show">
-        <canvas id="bar-chart4" width="700" height="350" style="opacity: 0;"></canvas>
+        <canvas id="bar-chart4" width="700" height="350"></canvas>
     </div>
     <div class="chart1 sa sa-up show">
-        <canvas id="bar-chart5" width="700" height="350" style="opacity: 0;"></canvas>
+        <canvas id="bar-chart5" width="700" height="350"></canvas>
     </div>
 
     <script>
@@ -72,26 +75,21 @@
                 title: {
                     display: true,
                     text: 'Predicted world population (millions) in 2050'
-                }
-            }
-        });
-        new Chart(document.getElementById("bar-chart2"), {
-            type: 'bar',
-            data: {
-                labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
-                datasets: [{
-                    label: "Population (millions)",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                    data: [2478, 5267, 734, 784, 433]
-                }]
-            },
-            options: {
-                legend: {
-                    display: false
                 },
-                title: {
-                    display: true,
-                    text: 'Predicted world population (millions) in 2050'
+                transitions: {
+                    show: {
+                        animations: {
+                            duration: 1000,
+                            easing: 'easeOutCubic',
+                            delay: 500000,
+                            x: {
+                                to: 1
+                            },
+                            y: {
+                                to: 0
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -115,46 +113,80 @@
                 }
             }
         });
-        new Chart(document.getElementById("bar-chart4"), {
+
+        let delayed;
+        const ctx = document.getElementById('bar-chart4').getContext('2d');
+        const config = new Chart(ctx, {
             type: 'bar',
-            data: {
-                labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
-                datasets: [{
-                    label: "Population (millions)",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                    data: [2478, 5267, 734, 784, 433]
-                }]
-            },
+            data: data,
             options: {
-                legend: {
-                    display: false
+                animation: {
+                    onComplete: () => {
+                        delayed = true;
+                    },
+                    delay: (context) => {
+                        let delay = 0;
+                        if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                            delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                        }
+                        return delay;
+                    },
                 },
-                title: {
-                    display: true,
-                    text: 'Predicted world population (millions) in 2050'
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true
+                    }
                 }
             }
         });
-        new Chart(document.getElementById("bar-chart5"), {
-            type: 'bar',
-            data: {
-                labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
-                datasets: [{
-                    label: "Population (millions)",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                    data: [2478, 5267, 734, 784, 433]
-                }]
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: 'Predicted world population (millions) in 2050'
-                }
-            }
+
+        const DATA_COUNT = 7;
+        const NUMBER_CFG = {
+            count: DATA_COUNT,
+            min: -100,
+            max: 100
+        };
+
+        const labels = Utils.months({
+            count: 7
         });
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Dataset 1',
+                data: Utils.numbers(NUMBER_CFG),
+                backgroundColor: Utils.CHART_COLORS.red,
+            }, {
+                label: 'Dataset 2',
+                data: Utils.numbers(NUMBER_CFG),
+                backgroundColor: Utils.CHART_COLORS.blue,
+            }, {
+                label: 'Dataset 3',
+                data: Utils.numbers(NUMBER_CFG),
+                backgroundColor: Utils.CHART_COLORS.green,
+            }, ]
+        };
+        const actions = [{
+            name: 'Randomize',
+            handler(chart) {
+                chart.data.datasets.forEach(dataset => {
+                    dataset.data = Utils.numbers({
+                        count: chart.data.labels.length,
+                        min: -100,
+                        max: 100
+                    });
+                });
+                chart.update();
+            }
+        }, ];
+        module.exports = {
+            actions: actions,
+            config: config,
+        };
+
 
 
         window.addEventListener('scroll', () => {
@@ -165,7 +197,7 @@
             var yScroll = window.scrollY;
 
             if (xScroll == 0 && yScroll == 1760) {
-                $('.sa').eq(0).css('opacity', 1);
+                //$('.sa').eq(0).css('opacity', 1);
             }
 
         });
